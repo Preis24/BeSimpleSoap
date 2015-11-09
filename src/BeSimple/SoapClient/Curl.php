@@ -68,14 +68,14 @@ class Curl
         // make http request
         $this->ch = curl_init();
         $curlOptions = array(
-            CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER =>  $options['verify_peer'],
-            CURLOPT_FAILONERROR => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_HEADER => true,
-            CURLOPT_USERAGENT => $options['user_agent'],
-            CURLINFO_HEADER_OUT => true,
+            CURLOPT_ENCODING        => '',
+            CURLOPT_SSL_VERIFYPEER  => false,
+            CURLOPT_FAILONERROR     => false,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_HTTP_VERSION    => CURL_HTTP_VERSION_1_1,
+            CURLOPT_HEADER          => true,
+            CURLOPT_USERAGENT       => $options['user_agent'],
+            CURLINFO_HEADER_OUT     => true,
         );
         curl_setopt_array($this->ch, $curlOptions);
         if (isset($options['compression']) && !($options['compression'] & SOAP_COMPRESSION_ACCEPT)) {
@@ -87,8 +87,11 @@ class Curl
         if (isset($options['timeout'])) {
             curl_setopt($this->ch, CURLOPT_TIMEOUT, $options['timeout']);
         }
-        if (isset($options['ssl_verifyhost'])){
+        if (isset($options['ssl_verifyhost'])) {
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $options['ssl_verifyhost']);
+        }
+        if (isset($options['ssl_verifypeer'])) {
+            curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $options['ssl_verifypeer']);
         }
         if (isset($options['proxy_host'])) {
             if (false !== $options['proxy_host']) {

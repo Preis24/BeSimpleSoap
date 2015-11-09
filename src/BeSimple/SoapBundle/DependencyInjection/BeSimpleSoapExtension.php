@@ -97,13 +97,21 @@ class BeSimpleSoapExtension extends Extension
                     $defOptions[$key] = $options[$key];
                 }
             }
-			
-			$auth = $options['auth'];
-			if((false !== $auth['type']) && ($auth['type'] === 'basic')) {
-			$definition->addMethodCall('withBasicAuthentication', array(
-                    $auth['login'], $auth['password']
-                ));
-			}
+
+            if (!empty($options['ssl'])) {
+                if ($options['ssl']['verify_host']) {
+                    $defOptions['ssl_verifyhost'] = true;
+                }
+
+                if ($options['ssl']['verify_peer']) {
+                    $defOptions['ssl_verifypeer'] = true;
+                }
+            }
+
+            $auth = $options['auth'];
+            if ($auth['login']) {
+                $definition->addMethodCall('withBasicAuthentication', array($auth['login'], $auth['password']));
+            }
 
             $proxy = $options['proxy'];
             if (false !== $proxy['host']) {
