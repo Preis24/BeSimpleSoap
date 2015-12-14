@@ -99,6 +99,7 @@ class SoapClient extends \SoapClient
         if (isset($options['soap_version'])) {
             $this->soapVersion = $options['soap_version'];
         }
+        $options['soap_version'] = $this->soapVersion;
 
         $this->curl = new Curl($options);
 
@@ -119,7 +120,6 @@ class SoapClient extends \SoapClient
         $options['cache_wsdl'] = WSDL_CACHE_NONE;
         parent::__construct($wsdlFile, $options);
     }
-
 
     /**
      * Perform HTTP request with cURL.
@@ -208,15 +208,15 @@ class SoapClient extends \SoapClient
         $soapResponse = $this->__doRequest2($soapRequest);
 
         // return SOAP response to ext/soap
-		//Fix for php soap multipart message bug
+        //Fix for php soap multipart message bug
         $response =  $soapResponse->getContent();
-		if (strpos($response ,'uuid') !== false) {
-			$response = explode("</soap:Envelope>",stristr($response,"<soap:Envelope"));
-			return $response[0] . "</soap:Envelope>";
-		}
-		else{
-			return $response;
-		}
+        if (strpos($response ,'uuid') !== false) {
+            $response = explode("</soap:Envelope>",stristr($response,"<soap:Envelope"));
+            return $response[0] . "</soap:Envelope>";
+        }
+        else{
+            return $response;
+        }
     }
 
     /**

@@ -99,12 +99,33 @@ class BeSimpleSoapExtension extends Extension
             }
 
             if (!empty($options['ssl'])) {
-                if ($options['ssl']['verify_host']) {
-                    $defOptions['ssl_verifyhost'] = true;
+                if (isset($options['ssl']['verify_host'])) {
+                    $defOptions['ssl_verifyhost'] = (bool) $options['ssl']['verify_host'];
                 }
 
-                if ($options['ssl']['verify_peer']) {
-                    $defOptions['ssl_verifypeer'] = true;
+                if (isset($options['ssl']['verify_peer'])) {
+                    $defOptions['ssl_verifypeer'] = (bool) $options['ssl']['verify_peer'];
+                }
+            }
+
+            if (!empty($options['class'])) {
+                $definition->addMethodCall('withClientClassName', array($options['class']));
+            }
+
+            if (!empty($options['soap_version'])) {
+
+                switch ($options['soap_version']) {
+                    case '1.1':
+                    case 1.1:
+                    case SOAP_1_1:
+                        $definition->addMethodCall('withSoapVersion11');
+                    break;
+
+                    case '1.2':
+                    case 1.2:
+                    case SOAP_1_2:
+                        $definition->addMethodCall('withSoapVersion12');
+                    break;
                 }
             }
 
@@ -112,6 +133,8 @@ class BeSimpleSoapExtension extends Extension
             if ($auth['login']) {
                 $definition->addMethodCall('withBasicAuthentication', array($auth['login'], $auth['password']));
             }
+
+
 
             $proxy = $options['proxy'];
             if (false !== $proxy['host']) {

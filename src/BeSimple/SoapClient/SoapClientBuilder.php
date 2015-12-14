@@ -30,6 +30,8 @@ class SoapClientBuilder extends AbstractSoapBuilder
      */
     protected $soapOptionAuthentication = array();
 
+    protected $clientClassName = 'BeSimple\SoapClient\SoapClient';
+
     /**
      * Create new instance with default options.
      *
@@ -50,7 +52,7 @@ class SoapClientBuilder extends AbstractSoapBuilder
     {
         $this->validateOptions();
 
-        return new SoapClient($this->wsdl, $this->getSoapOptions());
+        return new $this->clientClassName($this->wsdl, $this->getSoapOptions());
     }
 
     /**
@@ -61,6 +63,14 @@ class SoapClientBuilder extends AbstractSoapBuilder
     public function getSoapOptions()
     {
         return parent::getSoapOptions() + $this->soapOptionAuthentication;
+    }
+
+    /**
+     * @param string $class Classname
+     */
+    public function withClientClassName($class)
+    {
+        $this->clientClassName = $class;
     }
 
     /**
@@ -236,6 +246,22 @@ class SoapClientBuilder extends AbstractSoapBuilder
         $this->soapOptions['attachment_type'] = Helper::ATTACHMENTS_TYPE_MTOM;
 
         return $this;
+    }
+
+    /**
+     * @param bool $verify
+     */
+    public function withSslPeerVerification($verify = true)
+    {
+        $this->soapOptions['ssl_verifypeer'] = $verify;
+    }
+
+    /**
+     * @param bool $verify
+     */
+    public function withSslHostVerification($verify = true)
+    {
+        $this->soapOptions['ssl_verifyhost'] = $verify;
     }
 
     /**

@@ -29,6 +29,14 @@ class SoapClientBuilder extends BaseSoapClientBuilder
             $this->withWsdlCache($options['cache_type']);
         }
 
+        if (isset($options['ssl_verifyhost'])) {
+            $this->withSslHostVerification($options['ssl_verifyhost']);
+        }
+
+        if (isset($options['ssl_verifypeer'])) {
+            $this->withSslPeerVerification($options['ssl_verifypeer']);
+        }
+
         if ($classmap) {
             $this->withClassmap($classmap);
         }
@@ -50,10 +58,12 @@ class SoapClientBuilder extends BaseSoapClientBuilder
     protected function checkOptions(array $options)
     {
         $checkOptions = array(
-            'debug'      => false,
-            'cache_type' => null,
-            'exceptions' => true,
-            'user_agent' => 'BeSimpleSoap',
+            'debug'          => false,
+            'cache_type'     => null,
+            'exceptions'     => true,
+            'user_agent'     => 'BeSimpleSoap',
+            'ssl_verifyhost' => true,
+            'ssl_verifypeer' => true,
         );
 
         // check option names and live merge, if errors are encountered Exception will be thrown
